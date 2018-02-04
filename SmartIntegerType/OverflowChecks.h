@@ -54,8 +54,24 @@ template <typename T> bool overflow_multiplication(T a, T b)
 	return false;
 }
 
+// проверка на переполнение при делении (возможна только в случае INT_MIN/-1)
+template <typename T> bool overflow_division(T a, T b)
+{
+	T min { (a < b) ? a : b };
+	T max { (a > b) ? a : b };
+	return ( std::numeric_limits<T>::min() == min && -1 == max );
+}
+
 // данные проверки тратят вычислительное время. но являются универсальными, если бы проверки производились на беззнаковых
 // типах то можно было бы использовать свойства битов чисел, и делать её более эффеткивно, не не универсально.
+// по крайней мере речь идёт про реализацию, представленную здесь
+// https://stackoverflow.com/questions/199333/how-to-detect-integer-overflow
+// http://cpp-code.ru/blog2/sites/default/files/download/c_arimetic_operations_overflov_stoverflow.7z [mirrored link]
+// (можно сравнить работу ф-й предсталенных здесь и по ссылке с бит_сдвигами, на int_max, int_min *1/-1 и посмотреть
+// на результат работы ф-й и результат самой арифметической операции над упомянутыми числами
+// так же очень хорошая справка по переполнениям - расположена здесь
+// https://wiki.sei.cmu.edu/confluence/display/c/INT32-C.+Ensure+that+operations+on+signed+integers+do+not+result+in+overflow
+// http://cpp-code.ru/blog2/sites/default/files/download/c_arhicmetic_operations_overflow.7z [mirrored link]
 
 
 #endif //SMARTINTEGER_OVERFLOWCHECKS_H
